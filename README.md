@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Wix Authentication with External Identity Provider (Github OAuth)
 
-## Getting Started
+This is a sample project that demonstrates how to authenticate users with Wix using an external identity provider (Github OAuth). 
 
-First, run the development server:
+## When is this useful?
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This is useful when you want to authenticate users with Wix using an external identity provider like Github OAuth. In case you already have a user base in an external identity provider, or you want to allow your users to authenticate with an external identity provider for convenience, you can use this project as a reference. This would provide your users with a seamless login experience and still leverage Wix's powerful platform for member management.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What's in this project?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project is a Next.js app that demonstrates how to authenticate users with Wix using Github OAuth. It uses the following technologies:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+* Next.js (Basic setup)
+* Github OAuth (For github authentication) with Octokit
+* Wix SDK (For Wix authentication)
+* Wix Members API (For member management)
 
-## Learn More
+## Pre-requisites
 
-To learn more about Next.js, take a look at the following resources:
+Before you run this project, you need to have the following:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. A Wix account
+2. A Github account
+3. A Github App
+   * In your github app, be sure to set the following settings:
+     * Homepage URL: `http://localhost:3000`
+     * Authorization callback URL: `http://localhost:3000/api/auth/github/callback`
+4. A Wix site
+5. A Wix API Key with Members & Contacts permission.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## How to run this project?
 
-## Deploy on Vercel
+To run this project, you need to follow these steps:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Clone this repository
+2. Install the dependencies by running `npm install`
+3. Copy the `.env.template` file to `.env.local` and fill in the required values
+4. Run the project by running `npm run dev`
+5. Open `http://localhost:3000` in your browser and sign in with your Github account
+6. If you have set up everything correctly, you should be able to see your Wix member details and be able to update your Wix member profile slug
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## How does this work?
+
+Signing in Wix members with an external identity provider requires a few steps:
+
+1. Perform the login with the external identity provider (Github OAuth in this case)
+  * This depends on the external identity provider you are using. In this project, we are using Github OAuth to authenticate users.
+  * Here we are following the [Github OAuth web flow](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#web-application-flow) to authenticate users.
+  * We use the `@octokit/auth-app` package to finish the web flow and get the github user access token and user info. (See `getGithubAuth` and `getGithubUserEmail` in [`src/app/api/auth/github/callback/route.ts`](src/app/api/auth/github/callback/route.ts))
+2. Once the login process in complete, you should have the user's email available. We will be using the email as the unique identifier for the user between Wix and the external identity provider.
+3. Next, we want to ensure we have a Wix member created in our side for that email. We use the Wix Members API to create a member if a member with that email adress doesn't exist. (See `getOrCreateWixMember` in [`src/app/api/auth/github/callback/route.ts`](src/app/api/auth/github/callback/route.ts)). Since creating a Wix member (without an explicit registration) is an admin operation, we need to use a `WixClient` with an API Key that has permissions to create members.
+4. Once we have a member id for the user, we use the `getMemberTokensForExternalLogin` method on the `OAuthStragegy` to get the tokens for the user. This method will create a session for the user and return the tokens. (See `getMemberTokensForExternalLogin` in [`src/app/api/auth/github/callback/route.ts`](src/app/api/auth/github/callback/route.ts)). Since this is also an admin operation, it requires passing an API Key with the required permissions.
+5. Finally, we set the token on a cookie and redirect the user to the home page. The user should now be signed in with Wix.
+   

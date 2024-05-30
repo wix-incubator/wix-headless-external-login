@@ -9,18 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@octokit/auth-app": "^7.1.0",
+    "@octokit/auth-oauth-app": "^8.1.1",
+    "@wix/data": "^1.0.102",
+    "@wix/members": "^1.0.82",
+    "@wix/sdk": "https://cdn.dev.wixpress.com/@wix/sdk/1a48932247a5c3a3dc6bc59c4e768a58a847e074022bf6c0e75b1877.tar.gz",
+    "next": "14.2.3",
+    "next-auth": "^5.0.0-beta.18",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "typescript": "^5"
   }
 }
