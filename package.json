@@ -13,7 +13,7 @@
     "@octokit/auth-oauth-app": "^8.1.1",
     "@wix/data": "^1.0.102",
     "@wix/members": "^1.0.82",
-    "@wix/sdk": "https://cdn.dev.wixpress.com/@wix/sdk/1a48932247a5c3a3dc6bc59c4e768a58a847e074022bf6c0e75b1877.tar.gz",
+    "@wix/sdk": "^1.9.7",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.18",
     "react": "^18",
