@@ -1,5 +1,12 @@
 # Wix Authentication with External Identity Provider (Github OAuth)
 
+<blockquote class="important">
+
+__Important:__
+This code is no longer being maintained. You can find the [up-to-date code](https://github.com/wix/headless-templates/tree/main/nextjs/external-identity-provider) in the **headless-templates** repository.
+
+</blockquote>
+
 This is a sample project that demonstrates how to authenticate users with Wix using an external identity provider (Github OAuth). 
 
 ## When is this useful?
